@@ -3,10 +3,17 @@ const container1 = document.getElementById("phrases-es");
 const container2 = document.getElementById("phrases-en");
 const containerlife = document.getElementById("life");
 const modal = document.getElementById("modal");
+const modalSuccess = document.getElementById("modal-success");
+const btnSpeek = document.getElementById("btn-speak");
+const phraseSpeak = document.getElementById("phrase-speak");
+const textArea = document.getElementById("text-area");
+const containerExercice1 = document.getElementById("container-exercice1");
+const containerExercice2 = document.getElementById("container-exercice2");
 
 let currentValueFirst;
 let currentValueLast;
 let life = 3;
+let nextExercice = false;
 
 containerlife.append(life);
 
@@ -47,7 +54,7 @@ const exercice1 = {
   phrases_en: [
     { label: "Woman", value: "5-1" },
     { label: "Dog", value: "1-1" },
-    { label: "Bob has a cap", value: "2-1" },
+    { label: "Cat", value: "2-1" },
     { label: "Rice", value: "6-1" },
     { label: "House", value: "3-1" },
     { label: "Man", value: "4-1" },
@@ -60,6 +67,11 @@ const exercice1 = {
     { label: "Mujer", value: "5-2" },
     { label: "Arroz", value: "6-2" },
   ],
+};
+
+const exercice2 = {
+  text: "Sorry my friend but I have to go now",
+  acceptableResults: [{ label: "sorry my friend but i have to go now" }],
 };
 
 function selected(e) {
@@ -109,6 +121,17 @@ function selected(e) {
       }, 1000);
       if (life === 0) modal.classList.add("is-visible");
     }
+
+    const allBtns = Array.from(document.getElementsByClassName("btn"));
+    console.log(allBtns);
+
+    const resultExercice1 = allBtns.filter((items) => {
+      console.log(items.className.includes("is-success"));
+      return items.className.includes("is-success");
+    });
+    if (resultExercice1.length === 12) {
+      modalSuccess.classList.add("is-visible");
+    }
   }
 
   const btnClicked = document.getElementById(e.srcElement.id);
@@ -128,3 +151,46 @@ function createBtnPhrase(label, value) {
 }
 
 renderPhares();
+
+function nextGame() {
+  containerExercice1.classList.add("hidden");
+  containerExercice2.classList.remove("hidden");
+  modalSuccess.classList.remove("is-visible");
+}
+
+const recognition = new webkitSpeechRecognition() || SpeechRecognition();
+recognition.lang = "en-US";
+phraseSpeak.innerHTML = exercice2.text + ".";
+
+btnSpeek.addEventListener("mouseover", () => {
+  btnSpeek.classList.add("talking");
+  recognition.start();
+});
+
+btnSpeek.addEventListener("mouseout", () => {
+  btnSpeek.classList.remove("talking");
+  recognition.stop();
+  console.log(recognition);
+});
+
+recognition.addEventListener("result", (event) => {
+  btnSpeek.classList.remove("talking");
+  const result = event.results[0][0].transcript;
+  let responseSuccess;
+
+  exercice2.acceptableResults.map((item) => {
+    if (result.toLowerCase() === item.label) {
+      responseSuccess = true;
+    }
+  });
+
+  if (responseSuccess) {
+    textArea.innerHTML = result;
+  } else {
+    life = life - 1;
+    containerlife.innerHTML = life;
+    textArea.innerHTML = result;
+
+    if (life === 0) modal.classList.add("is-visible");
+  }
+});

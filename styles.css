@@ -24,13 +24,15 @@ h1 {
   justify-content: end;
   position: relative;
   height: 40px;
+  padding-top: 24px;
+  margin-left: -24px;
 }
 
 #life {
   position: absolute;
   z-index: 2;
   right: 10.5px;
-  top: 5px;
+  top: 30px;
   font-weight: 600;
 }
 
@@ -83,6 +85,10 @@ h1 {
   background-color: #04bf9d;
 }
 
+.is-success:hover {
+  background-color: #04bf9d;
+}
+
 .container-modal {
   width: 100vw;
   height: 100vh;
@@ -130,4 +136,43 @@ h1 {
   color: #fff;
   font-weight: 600;
   font-size: 16px;
+}
+
+#phrase-speak {
+  margin-bottom: 16px;
+}
+
+#text-area {
+  width: -webkit-fill-available;
+  padding: 12px;
+}
+.container-btn-speack {
+  display: flex;
+  justify-content: center;
+}
+
+#btn-speak {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  margin-top: 32px;
+  background-color: #bf3500;
+  cursor: pointer;
+}
+
+#btn-speak.talking {
+  box-shadow: 0px 0px 28px 0px #bf350090;
+}
+
+#btn-speak svg {
+  width: 24px;
+  height: 24px;
+}
+
+#container-exercice2 {
+}
+
+.hidden {
+  display: none;
 }
